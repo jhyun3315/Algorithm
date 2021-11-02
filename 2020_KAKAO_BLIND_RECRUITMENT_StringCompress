@@ -1,0 +1,37 @@
+class Solution {
+    public int solution(String s) {
+        if(s.length() ==1) return 1;
+        int result = s.length();
+
+        // 단위: i
+        for (int i = 1; i < s.length()/2 + 1; i++) { 
+            String prior = s.substring(0, i);
+            String curr = "";
+            String tmp  = s;
+            for(int n=0;n<i;n++) tmp+=" ";
+            int len = tmp.length()/i;
+            int answer = 1;
+
+            String str = "";
+
+            for (int j = 1; j<len; j++) {
+                curr = tmp.substring((j * i), (j + 1) * i);
+                if (prior.equals(curr)) answer++;
+                else {
+                    if (answer > 1) str+= answer + prior;
+                    else str += prior;
+                    answer =1;
+                    prior = curr;
+                }
+            }
+
+            if(s.length()%i!=0){
+                str+=curr;
+            }
+            str = str.replace(" ",""); 
+            result = Math.min(result, str.length());
+
+        }
+        return result;
+    }
+}
