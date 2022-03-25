@@ -1,45 +1,54 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.StringWriter;
 import java.util.*;
 
 public class Main {
+    static int getMaxCount(HashMap<Integer, Integer> hashMap){
+        int max = 1;
+        ArrayList<Integer> arr = new ArrayList<>();
+
+        for(Integer key : hashMap.keySet()) {
+            if (hashMap.get(key) > max) {
+                max = hashMap.get(key);
+            }
+        }
+
+        for(Integer key : hashMap.keySet()) if(hashMap.get(key) == max) arr.add(key);
+        if(arr.size()>1){
+            Collections.sort(arr);
+            return arr.get(1);
+        }else return arr.get(0);
+
+    }
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int n = Integer.parseInt(br.readLine());
-        Integer[] arr= new Integer[n];
-        HashMap<Integer, Integer> map = new HashMap<>();
-        int sum =0;
-        int mid = (n/2);
+
+        double sum =0;
+        int[] arr = new int[n];
+        HashMap<Integer, Integer> hashMap = new HashMap<>();
 
         for(int i=0;i<n;i++){
-            int curr =  Integer.parseInt(br.readLine());
-            arr[i] = curr;
-            map.put(curr, map.getOrDefault(curr,0)+1);
+            int curr = Integer.parseInt(br.readLine());
             sum+=curr;
+            arr[i] = curr;
+            hashMap.put(curr, hashMap.getOrDefault(curr, 0)+1);
         }
-
-        if(sum/n <0) System.out.println(String.format("%.0f",(double)sum/n));
-        else System.out.println(sum/n);
 
         Arrays.sort(arr);
-        System.out.println(arr[mid]);
 
-        if(map.size()==1) System.out.println(arr[0]);
-        else{
-            List<Map.Entry<Integer, Integer>> entryList = new LinkedList<>(map.entrySet());
-            entryList.sort((o1, o2) -> {
-                if(o1.getValue().equals(o2.getValue())) return o1.getKey() - o2.getKey();
-                return o2.getValue() - o1.getValue();
-            });
+        StringWriter sw = new StringWriter();
 
-            if(entryList.get(0).getValue().equals( entryList.get(1).getValue())) System.out.println(entryList.get(1).getKey());
-            else System.out.println(entryList.get(0).getKey());
-        }
+        sw.append(Integer.toString((int) Math.round(sum/n))).append('\n');
+        if(n==1) sw.append(Integer.toString(arr[0])).append('\n');
+        else sw.append(Integer.toString(arr[n/2])).append('\n');
+        sw.append(Integer.toString(getMaxCount(hashMap))).append('\n');
+        sw.append(Integer.toString(arr[n-1] -arr[0])).append('\n');
 
-        System.out.println(Math.abs(arr[n-1] - arr[0]));
+        System.out.println(sw);
 
     }
 }
-
